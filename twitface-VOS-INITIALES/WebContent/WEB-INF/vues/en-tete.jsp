@@ -8,10 +8,32 @@
 <img src="${pageContext.request.contextPath}/images/oiseau-twitter.png" id="oiseau-twitface" alt="Oiseau twitface" />
 
 <div id="connexion">
+	<%-- Utilisateur connecté; on affiche de l'information sur l'utilisateur --%>
+	<c:if test="${not empty sessionScope['connBean'] && sessionScope.connBean.getModeConn() != 'AUCUN' && empty sessionScope['msgErrConn']}">
+		<%-- Affichage de la photo si c'est un membre (pas un administrateur) --%>
+		<c:if test="${sessionScope['connBean'].getModeConn() == 'MEMBRE'}">
+			<fmt:formatNumber var="noFormate" value="${sessionScope.connBean.getNoUtil()}" pattern="000" />
+			<img src="${pageContext.request.contextPath}/images/photos/membre-${noFormate}.jpg" id="photo-membre-conn" alt="Photo de ${sessionScope['nom']}" />
+		</c:if>
 
+		<div id="info-util">
+			<p>
+				${sessionScope.connBean.getNom()} (${sessionScope.connBean.getNomUtil()})
+				<c:if test="${sessionScope['connBean'].getModeConn() == 'ADMIN'}">
+					<br><span>Administrateur du site web</span>
+				</c:if>
+			</p>
+			<p>
+				<a href="${pageContext.request.contextPath}/deconnexion">Déconnexion</a>
+			</p>
+		</div>
+	</c:if>  <%-- Fin de utilisateur connecté --%>
+	
+	<c:if test="${empty sessionScope['connBean'] || sessionScope['connBean'].getModeConn() == 'AUCUN' && empty sessionScope['msgErrConn']}">
 	<div id="form-connexion">
 		<!-- Formulaire de connexion -->
-		<form method="post" action="/connexion">
+		<form method="post" action="${pageContext.request.contextPath}/connexion">
+
 			<p>
 				<label for="nom-util">Nom d'utilisateur : </label>
 				<input type="text" name="nom-util" id="nom-util" />
@@ -25,28 +47,12 @@
 			<%-- Champ caché pour indiquer une tentative de connexion à partir de la recherche d'amis --%>
 			<input type="hidden" name="source" value="rech-amis" />
 
-			<%-- Affichage du message d'erreur, si nécessaire --%>
-			<p id="msg-err-conn">MESSAGE D'ERREUR, SI NÉCESSAIRE SEULEMENT</p>
+			<c:if test="${not empty requestScope['msgErrConn']}">
+				<p id="msg-err-conn"><c:out value="${requestScope['msgErrConn']}" /></p>
+			</c:if> 
 		</form>
 	</div>  <!-- Fin de la division "form-connexion" -->
-
-
-	<%-- Utilisateur connecté; on affiche de l'information sur l'utilisateur --%>
-	<c:if test="${not empty sessionScope['modeConn'] && sessionScope['modeConn'] != 'AUCUN'}">
-		<%-- Affichage de la photo si c'est un membre (pas un administrateur) --%>
-		<fmt:formatNumber var="noFormate" value="${sessionScope['noUtil']}" pattern="000" />
-		<img src="${pageContext.request.contextPath}/images/photos/membre-${noFormate}.jpg" id="photo-membre-conn" alt="Photo de ${sessionScope['nom']}" />
-			
-		<div id="info-util">
-			<p>
-				${sessionScope['nom']} (${sessionScope['nomUtil']})
-			</p>
-			<p>
-				<a href="${pageContext.request.contextPath}/deconnexion">Déconnexion</a>
-			</p>
-		</div>
-
-	</c:if>  <%-- Fin de utilisateur connecté --%>
+	</c:if>  <%-- Fin de utilisateur non connecté --%>
 
 
 </div>  <!-- Fin de la division "connexion" -->

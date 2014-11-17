@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.dinfogarneau.cours526.twitface.classes.ConnexionMode;
 import com.dinfogarneau.cours526.twitface.modeles.ModeleGestionAmis;
+import com.dinfogarneau.cours526.twitface.beans.ConnexionBean;
 
 /**
  * Contrôleur pour les ressources des membres.
@@ -44,6 +45,10 @@ public class ControleurMembre extends HttpServlet {
 	protected String vueSousTitre;
 	
 	/**
+	 * Bean de connexion
+	 */
+	protected ConnexionBean sessionConnBean;
+	/**
 	 * Permet d'effectuer les traitements avant de gérer la ressource demandée.
 	 * @param request La requête HTTP.
 	 * @param response La réponse HTTP.
@@ -62,9 +67,11 @@ public class ControleurMembre extends HttpServlet {
 		response.setHeader("Pragma", "no-cache");  // HTTP 1.0.
 		response.setDateHeader("Expires", 0);  // Proxies.
 		
+		sessionConnBean = (ConnexionBean) request.getSession().getAttribute("connBean");
+		
 		// Récupération du mode de connexion dans la session utilisateur.
 		// *** À MODIFIER (UTILISATION DU BEAN DE CONNEXION) ***
-		ConnexionMode modeConn = (ConnexionMode) request.getSession().getAttribute("modeConn");
+		ConnexionMode modeConn = (ConnexionMode) sessionConnBean.getModeConn();
 
 		// Contrôle d'accès à la section pour les clients.
 		if (modeConn == null || modeConn != ConnexionMode.MEMBRE) {
@@ -106,8 +113,8 @@ public class ControleurMembre extends HttpServlet {
 				vueContenu = "/WEB-INF/vues/membre/accueil-membre.jsp";
 				
 				// *** À MODIFIER (UTILISATION DU BEAN DE CONNEXION) ***
-				String nom = (String) request.getSession().getAttribute("nom");
-				String nomUtil = (String) request.getSession().getAttribute("nomUtil");
+				String nom = (String) sessionConnBean.getNom();
+				String nomUtil = (String) sessionConnBean.getNomUtil();
 				vueSousTitre = "Page personnelle de " + nom + " (" + nomUtil + ")";
 
 			// Profil - Babillard

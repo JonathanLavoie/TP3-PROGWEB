@@ -38,17 +38,16 @@
 
 			<%-- Affichage d'un lien approprié en fonction du mode de connection --%>
 			<c:choose>
-				<c:when test="${sessionScope['modeConn'] == 'MEMBRE'}">
+				<c:when test="${sessionScope['connBean'].getModeConn() == 'MEMBRE'}">
 					<a href="${pageContext.request.contextPath}/membre">Retour à votre page personnelle</a>
 				</c:when>
-				<c:when test="${sessionScope['modeConn'] == 'ADMIN'}">
+				<c:when test="${sessionScope['connBean'].getModeConn() ==  == 'ADMIN'}">
 					<a href="${pageContext.request.contextPath}/admin">Retour à la page d'administration du site Web</a>
 				</c:when>
 				<c:otherwise>
 					<a href="${pageContext.request.contextPath}/">Retour à l'accueil</a>
 				</c:otherwise>
-			</c:choose>
-			
+			</c:choose>			
 			<h3>Trace d'appels</h3>
 
 			<ul>

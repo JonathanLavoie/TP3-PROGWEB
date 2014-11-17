@@ -30,10 +30,11 @@
 		</header>
 
 		<div id="contenu">
-
+	
 			<%-- Affichage du message confirmation la déconnexion, si nécessaire --%>
-			<p id="msg-conf-deconn">MESSAGE DE CONFIRMATION DE DÉCONNEXION, SI NÉCESSAIRE</p>
-
+			<c:if test="${not empty requestScope['msgConfDeconn']}">
+				<p id="msg-conf-deconn"><c:out value="${requestScope['msgConfDeconn']}"/></p>
+			</c:if> 
 			<section id="inscription">
 				<h2>Inscription</h2>
 				<div id="form-inscription">
@@ -50,7 +51,7 @@
 					<form method="post" action="${pageContext.request.contextPath}/connexion">
 						<p>
 							<label for="nom-util">Nom d'utilisateur : </label>
-							<input type="text" name="nom-util" id="nom-util" />
+							<input type="text" name="nom-util" id="nom-util"/>
 						</p>
 						<p>
 							<label for="mot-passe">Mot de passe : </label>
@@ -59,7 +60,9 @@
 						<input type="image" id="img-soumettre-connexion" src="${pageContext.request.contextPath}/images/icone-connexion.png" alt="Se connecter" />
 
 						<%-- Affichage du message d'erreur, si nécessaire --%>
-						<p id="msg-err-conn">MESSAGE D'ERREUR, SI NÉCESSAIRE</p>
+						<c:if test="${not empty requestScope['msgErrConn']}">
+							<p id="msg-err-conn"><c:out value="${requestScope['msgErrConn']}" /></p>
+						</c:if> 
 
 					</form>
 				</div>  <!-- Fin de la division "form-connexion" -->

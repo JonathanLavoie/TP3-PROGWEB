@@ -62,10 +62,16 @@
 #lst-pub-babillard .lien-supp {
 	display: block;
 	position: absolute;
-	right: 10px;
-	top: 10px;
+	right: 5px;
+	top:  5px;
+	width:16px;
+	height:16px;
 }
-
+#lst-pub-babillard span{
+	display:block;
+	margin-bottom: 10px;
+	font-weight: bold;
+}
 /* Formulaire de recherche d'amis */
 #form-rechercher-amis {
 	font-size:12px;

@@ -9,6 +9,21 @@
     <servlet-name>ControleurGeneral</servlet-name>
     <url-pattern>/</url-pattern>
   </servlet-mapping>
+  
+  
+  
+  	<servlet>
+  		<servlet-name>ControleurAdmin</servlet-name>
+    	<servlet-class>com.dinfogarneau.cours526.twitface.controleurs.ControleurAdmin</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>ControleurAdmin</servlet-name>
+    	<url-pattern>/admin/*</url-pattern>
+    </servlet-mapping>
+  
+  
+  
+  
   <servlet>
     <servlet-name>ControleurMembre</servlet-name>
     <servlet-class>com.dinfogarneau.cours526.twitface.controleurs.ControleurMembre</servlet-class>

@@ -11,7 +11,7 @@
 		SELECT *
 		FROM membres
 		WHERE MemNo = ?
-		<sql:param value="${sessionScope['noUtil']}" />
+		<sql:param value="${sessionScope['connBean'].getNoUtil()}" />
 	</sql:query>
 	
 	<%-- Affichage des informations du membre --%>

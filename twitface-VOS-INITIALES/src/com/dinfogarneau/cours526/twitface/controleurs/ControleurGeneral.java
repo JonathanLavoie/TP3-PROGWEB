@@ -1,11 +1,18 @@
 package com.dinfogarneau.cours526.twitface.controleurs;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
+
+import com.dinfogarneau.cours526.twitface.beans.ConnexionBean;
 import com.dinfogarneau.cours526.twitface.classes.ConnexionMode;
+import com.dinfogarneau.cours526.twitface.modeles.ModeleConnexion;
 
 /**
  * Contrôleur général pour les ressources publiques.
@@ -82,12 +89,18 @@ public class ControleurGeneral extends HttpServlet {
 			// *******************
 			// *** À COMPLÉTER ***
 			// *******************
-
+			
 			// Paramètres pour la vue créée à partir du gabarit.
 			vue = "/WEB-INF/vues/gabarit-vues.jsp";
 			vueContenu = "/WEB-INF/vues/general/rech-amis.jsp";
 			vueSousTitre = "Rechercher des amis";
-
+		} else if (uri.equals("/deconnexion")) {
+			
+			request.setAttribute("msgConfDeconn","Déconnecté avec succès !");
+			request.getSession().removeAttribute("connBean");
+			vue = "/WEB-INF/vues/index.jsp";
+			
+			
 		// Méthode HTTP non permise
 		// ========================
 		} else if (uri.equals("/connexion")) {
@@ -126,21 +139,69 @@ public class ControleurGeneral extends HttpServlet {
 		// Connexion
 		// =========
 		if (this.uri.equals("/connexion")) {
+			
+			String nomUtil = request.getParameter("nom-util");
+			nomUtil.trim();
+			String mdp = request.getParameter("mot-passe");
+			String source = request.getParameter("source");
+			ModeleConnexion modeleConn = new ModeleConnexion(nomUtil,mdp);
+			
+			try {
+					
+					modeleConn.seConnecter();
+					
+					ConnexionBean connBean = modeleConn.getConnexionBean();
+					
+					if(connBean != null){
 
-			// TEMPORAIRE POUR SIMULER LE FAIT D'ÊTRE CONNECTÉ
-			// ***********************************************
-			request.getSession().setAttribute("nomUtil", "sackid");
-			request.getSession().setAttribute("nom", "Sacha Kidd");
-			request.getSession().setAttribute("noUtil", 258);
-			request.getSession().setAttribute("modeConn", ConnexionMode.MEMBRE);
-			// NOTE: DEVRA ÊTRE IMPLEMENTÉ À L'AIDE DU BEAN DE CONNEXION
-			// *********************************************************
+						request.getSession().setAttribute("connBean", connBean);
+						request.getSession().removeAttribute("msgErrConn");
+						
+						// Redirection côté client vers la section pour les membres.
+						// Note : Aucune vue ne sera produite comme réponse à cette requête;
+						// La requête subséquente vers la section "membre" (faite par le navigateur Web)
+						// produira la vue correspondant à la page d'accueil des membres.
+						
+						//CHANGER POUR RECH-AMIS
+						if(source != null)
+						{
+							response.sendRedirect("rech-amis");
+						}
+						else if(connBean.getModeConn() == ConnexionMode.MEMBRE)
+						{
+							response.sendRedirect("membre");
+						}
+						else if(connBean.getModeConn() == ConnexionMode.ADMIN)
+						{
+							response.sendRedirect("admin/");
+						}
+					}
+					else
+					{
+						request.setAttribute("msgErrConn", modeleConn.getMsgErreur());
+						request.getSession().removeAttribute("connBean");
+						if(source != null)
+						{
+							vue = "/WEB-INF/vues/gabarit-vues.jsp";
+							vueContenu = "/WEB-INF/vues/general/rech-amis.jsp";
+							vueSousTitre = "Rechercher des amis";
+						}
+						else
+						{
+							vue = "/WEB-INF/vues/index.jsp";
+						}
+					}
 
-			// Redirection côté client vers la section pour les membres.
-			// Note : Aucune vue ne sera produite comme réponse à cette requête;
-			// La requête subséquente vers la section "membre" (faite par le navigateur Web)
-			// produira la vue correspondant à la page d'accueil des membres.
-			response.sendRedirect("membre");
+			
+			} catch (NamingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			
 
 		// Méthode HTTP non permise
 		// ========================
