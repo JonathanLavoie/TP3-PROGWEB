@@ -13,9 +13,9 @@
 		</sql:query>
 		
 		<ul id="lst-pub-babillard">
-			<%-- On parcourt tous les films du jeu de résultats. --%>
+			<%-- On parcourt tous les publications. --%>
 			<c:forEach var="pub" items="${lesPub.rows}">
-				<%-- Affichage du titre et de la description du film. --%>
+				<%-- Affichage des publications --%>
 				<li>
 					<fmt:formatNumber var="noFormate" value="${pub.MemNoCreateur}"  pattern="000" />
 					<img src="${pageContext.request.contextPath}/images/photos/membre-${noFormate}.jpg" class="photo-membre"/>

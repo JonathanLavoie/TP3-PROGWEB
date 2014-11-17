@@ -7,6 +7,7 @@
 		<li><a href="${pageContext.request.contextPath}/membre">Accueil - Nouvelles</a></li>
 		<li><a href="${pageContext.request.contextPath}/membre/profil">Profil - Babillard</a></li>
 		<li><a href="${pageContext.request.contextPath}/membre/sugg-amis">Suggérer des amis</a></li>
+		<li><a href="${pageContext.request.contextPath}/membre/mes-amis">Vos amis</a></li>
 	</c:if>
 	<c:if test="${empty sessionScope['connBean'] || sessionScope['connBean'] == 'AUCUN'}">
 		<li><a href="${pageContext.request.contextPath}/">M'inscrire</a></li>

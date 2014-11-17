@@ -128,14 +128,13 @@ public class ControleurMembre extends HttpServlet {
 			// Suggérer des amis
 			// =================
 			} else if (uri.equals("/membre/sugg-amis")) {
-
 				// Création du modèle pour suggérer des amis.
 				ModeleGestionAmis mga = new ModeleGestionAmis();
 				// Appel de la méthode du modèle qui suggère des amis.
 				// La liste des amis suggérés est conservée dans le modèle.
 				try {
 					mga.suggererAmis(
-							(int) request.getSession().getAttribute("noUtil"),
+							sessionConnBean.getNoUtil(),
 							request.getParameter("indice-prem"),
 							request.getParameter("nb-amis-sugg")
 							);
@@ -171,6 +170,32 @@ public class ControleurMembre extends HttpServlet {
 				vue = "/WEB-INF/vues/gabarit-vues.jsp";
 				vueContenu = "/WEB-INF/vues/en-construction.jsp";
 				vueSousTitre = "Demande d'amitié";
+			} else if (uri.equals("/membre/mes-amis")) {
+				
+				vue = "/WEB-INF/vues/gabarit-vues.jsp";
+				vueContenu = "/WEB-INF/vues/membre/mes-amis.jsp";
+				vueSousTitre = "Mes amis";
+				
+			} else if (uri.equals("/membre/accept-dem-ami")) {
+				
+				// Création du modèle pour suggérer des amis.
+				ModeleGestionAmis mga = new ModeleGestionAmis();
+				// Appel de la méthode du modèle qui suggère des amis.
+				// La liste des amis suggérés est conservée dans le modèle.
+				try {
+					mga.acceptAmi(
+							sessionConnBean.getNoUtil(),
+							Integer.parseInt(request.getParameter("no-ami")));
+				} catch (NamingException | SQLException e) {
+					throw new ServletException(e);
+				}
+
+				// Conservation du modèle dans un attribut de la requête.
+				request.setAttribute("modAcceptDemAmis", mga);
+				
+				vue = "/WEB-INF/vues/gabarit-vues.jsp";
+				vueContenu = "/WEB-INF/vues/membre/mes-amis.jsp";
+				vueSousTitre = "Mes amis";
 				
 			// Ressource non disponible
 			// ========================
@@ -204,7 +229,10 @@ public class ControleurMembre extends HttpServlet {
 			// ========================
 			if (uri.equals("/membre/") || uri.equals("/membre")
 					|| uri.equals("/membre/profil")	|| uri.equals("/membre/sugg-amis")
-					|| uri.equals("/membre/supp-ami") || uri.equals("/membre/dem-ami")) {
+					|| uri.equals("/membre/supp-ami") || uri.equals("/membre/dem-ami")
+					|| uri.equals("/membre/accept-dem-ami")
+					|| uri.equals("/membre/mes-amis")
+					|| uri.equals("/membre/sup-ami")){
 				response.sendError(405);
 				
 			// Ressource non disponible
