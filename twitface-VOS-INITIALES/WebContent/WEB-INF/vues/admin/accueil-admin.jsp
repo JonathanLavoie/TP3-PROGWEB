@@ -21,7 +21,7 @@
 					<img src="${pageContext.request.contextPath}/images/photos/membre-${noFormate}.jpg" class="photo-membre"/>
 					<span>Soumis par ${pub.MemNom} le ${pub.PubDate}</span>
 					${pub.PubTexte}
-					<a href="${pageContext.request.contextPath}/admin/supp-pub?${pub.PubNo}">
+					<a href="${pageContext.request.contextPath}/admin/supp-pub?no-pub${pub.PubNo}">
 						<img src="${pageContext.request.contextPath}/images/detruire.png" class="lien-supp"/>
 					</a>
 				</li>
