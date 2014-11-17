@@ -20,6 +20,10 @@
 	overflow:hidden;
 	text-align:center;
 }
+.aucun{
+	text-align:center;
+	margin:auto;
+}
 .lst-membres li p {
 	font-size:12px;
 	font-style:italic;

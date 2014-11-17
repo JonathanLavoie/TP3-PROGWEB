@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//src/com/dinfogarneau/cours526/twitface/beans/ConnexionBean.java=UTF-8
+encoding//src/com/dinfogarneau/cours526/twitface/controleurs/ControleurGeneral.java=UTF-8
+encoding//src/com/dinfogarneau/cours526/twitface/controleurs/ControleurMembre.java=UTF-8
+encoding//src/com/dinfogarneau/cours526/twitface/modeles/ModeleGestionAmis.java=UTF-8
+encoding//src/com/dinfogarneau/cours526/twitface/modeles/ModeleRechAmis.java=UTF-8
+encoding//src/com/dinfogarneau/cours526/util/ReqPrepBdUtil.java=UTF-8

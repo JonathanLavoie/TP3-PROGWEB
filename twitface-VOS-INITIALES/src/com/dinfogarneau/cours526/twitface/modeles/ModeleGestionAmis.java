@@ -3,8 +3,10 @@ package com.dinfogarneau.cours526.twitface.modeles;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.naming.NamingException;
+
 import com.dinfogarneau.cours526.twitface.classes.Ami;
 import com.dinfogarneau.cours526.util.ReqPrepBdUtil;
 
@@ -42,6 +44,22 @@ public class ModeleGestionAmis {
 	 * Le nombre d'amis suggérés que le jeu de résultats doit contenir pour les suggestions.
 	 */
 	private int nbAmisSugg;
+	/**
+	 * Le numero de l'utilisateur connecte pour un ajout d'ami
+	 */
+	private int noUtil;
+	/**
+	 * Le nombre de l'ami pour un ajout d'ami
+	 */
+	private int noAmi;
+	/**
+	 * Savoir si l'invitation d'ami existe
+	 */
+	private boolean existe;
+	/**
+	 * Message d'erreur ou de confirmation
+	 */
+	private String Message;
 	
 	// Constructeur
 	// ============
@@ -101,6 +119,9 @@ public class ModeleGestionAmis {
 		return this.nbAmisSugg;
 	}
 
+	public boolean getExiste() {
+		return this.existe;
+	}
 	/**
 	 * Modifie le nombre d'amis suggérés que le jeu de résultats doit contenir pour les suggestions.
 	 * @param nbAmisSugg Le nouveau nombre d'amis suggérés que le jeu de résultats doit contenir pour les suggestions.
@@ -108,7 +129,27 @@ public class ModeleGestionAmis {
 	public void setNbAmisSugg(int nbAmisSugg) {
 		this.nbAmisSugg = nbAmisSugg;
 	}
-
+	/**
+	 * Modifie le numero de l'utilisatuer connecter
+	 * @param Numero de l'utilsateur connecter
+	 */
+	public void setNoUtil(int noUtil) {
+		this.noUtil = noUtil;
+	}
+	/**
+	 * Modifie le numero de l'ami
+	 * @param Numero de l'ami
+	 */
+	public void setNoAmi(int noAmi) {
+		this.noAmi = noAmi;
+	}
+	/**
+	 * Message d'erreur ou de confirmation 
+	 * @return Message d'erreur ou de confirmation 
+	 */
+	public String getMessage() {
+		return this.Message;
+	}
 	
 	// Méthodes
 	// ========
@@ -262,4 +303,65 @@ public class ModeleGestionAmis {
 		
 	}  // Fin de "suggererAmis"
 
+public void acceptAmi(int noUtil, int noAmi) throws NamingException, SQLException {
+
+	// Ajoute les bonnes valeurs au attributs
+	this.noUtil = noUtil;
+	this.noAmi = noAmi;
+	
+	// Source de données (JNDI).
+	String nomDataSource = "jdbc/twitface";
+
+	// Création de l'objet pour l'accès à la BD.
+	ReqPrepBdUtil utilBd = new ReqPrepBdUtil(nomDataSource);
+
+	// Obtention de la connexion à la BD.
+	utilBd.ouvrirConnexion();
+
+	// Requête SQL permettant de regarder si l'invitation est dans la bd.
+	String reqSQLRechercheSuggAmis =
+				"SELECT MemNom, COUNT(*) AS nbr"
+			+ " FROM demandes_amis"
+			+ " INNER JOIN membres"
+			+ "	ON MemNoDemandeur = MemNo"
+			+ " WHERE MemNoDemandeur = ?"
+			+ " AND MemNoInvite = ?";
+
+	// Préparation de la requête SQL.
+	utilBd.preparerRequete(reqSQLRechercheSuggAmis, false);
+	
+	// Exécution de la requête tout en lui passant les paramètres pour l'exécution.
+	ResultSet rs = utilBd.executerRequeteSelect( this.noAmi, this.noUtil);
+	
+	rs.next();
+	
+	// Regarde si l'invitation Existe.
+	int nbr = rs.getInt("nbr");
+	String str = rs.getString("MemNom");
+	if (str == null)
+		str = "cette personne";
+	if (nbr == 1)
+	{
+		this.existe = true;
+		this.Message = "Vous etre maintenant ami avec " + str;
+	} else {
+		this.existe = false;
+		this.Message = "Desolé mais vous n'avez pas recu d'invitation de " + str;
+	}
+
+	if (this.existe)
+	{
+		Date ladate = new Date();
+		String reqSQLAjouterAmi = "INSERT INTO amis VALUES (?,?,?)";
+		utilBd.preparerRequete(reqSQLAjouterAmi, false);
+		utilBd.executerRequeteMaj(this.noUtil,this.noAmi, ladate);
+		
+		String reqSQLSupprimerDemAmi = "DELETE FROM demandes_amis WHERE MemNoDemandeur = ? AND MemNoInvite = ?";
+		utilBd.preparerRequete(reqSQLSupprimerDemAmi, false);
+		utilBd.executerRequeteMaj(this.noAmi,this.noUtil);
+	}
+	// Fermeture de la connexion à la BD.
+	utilBd.fermerConnexion();
+	
+	}
 }

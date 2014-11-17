@@ -1,11 +1,16 @@
 package com.dinfogarneau.cours526.twitface.controleurs;
 
 import java.io.IOException;
+import java.sql.SQLException;
+
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.dinfogarneau.cours526.twitface.classes.ConnexionMode;
+import com.dinfogarneau.cours526.twitface.modeles.ModeleRechAmis;
 
 /**
  * Contrôleur général pour les ressources publiques.
@@ -79,10 +84,46 @@ public class ControleurGeneral extends HttpServlet {
 		// ===================
 		} else if (uri.equals("/rech-amis")) {
 
-			// *******************
-			// *** À COMPLÉTER ***
-			// *******************
+			ModeleRechAmis mra = new ModeleRechAmis();
+			boolean rechAmis = false;
 
+			try {
+				if ((request.getParameter("nom-ami") != null) && (request.getParameter("nom-ami").trim() != ""))
+				{
+					mra.setNomAmi((String) request.getParameter("nom-ami").trim());
+					rechAmis = true;
+				}
+				if ((request.getParameter("ville-actuelle") != null) && (request.getParameter("ville-actuelle").trim() != ""))
+				{
+					mra.setVilleActuelle((String) request.getParameter("ville-actuelle").trim());
+					rechAmis = true;
+				}
+				if ((request.getParameter("ville-origine") != null) && (request.getParameter("ville-origine").trim() != ""))
+				{
+					mra.setVilleOrigine((String) request.getParameter("ville-origine").trim());
+					rechAmis = true;
+				}
+				
+				String[] sexe = request.getParameterValues("sexe");
+				if ((sexe != null) && (sexe.length == 1))
+				{
+					mra.setSexe(sexe[0]);
+					rechAmis = true;
+				}
+				if (request.getSession().getAttribute("noUtil") != null)
+				{
+					mra.setnoUtil(request.getSession().getAttribute("noUtil").toString());
+				}
+				if (rechAmis)
+				{
+					mra.rechercheAmis();
+				}
+			} catch (NamingException | SQLException e) {
+				throw new ServletException(e);
+			}
+			
+			request.setAttribute("modRechAmis", mra);
+			
 			// Paramètres pour la vue créée à partir du gabarit.
 			vue = "/WEB-INF/vues/gabarit-vues.jsp";
 			vueContenu = "/WEB-INF/vues/general/rech-amis.jsp";
