@@ -91,10 +91,10 @@ public class ControleurGeneral extends HttpServlet {
 		// ===================
 		} else if (uri.equals("/rech-amis")) {
 
-
+			
 			ModeleRechAmis mra = new ModeleRechAmis();
 			boolean rechAmis = false;
-
+			// Regarde si les champs s'on vide ou null
 			try {
 				if ((request.getParameter("nom-ami") != null) && (request.getParameter("nom-ami").trim() != ""))
 				{

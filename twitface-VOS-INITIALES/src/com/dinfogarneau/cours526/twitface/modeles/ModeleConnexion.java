@@ -10,15 +10,35 @@ import com.dinfogarneau.cours526.twitface.classes.Ami;
 import com.dinfogarneau.cours526.twitface.classes.ConnexionMode;
 import com.dinfogarneau.cours526.util.ReqPrepBdUtil;
 import com.dinfogarneau.cours526.twitface.beans.ConnexionBean;
-
+/**
+ * Modele pour la connextion
+ * @author Main Nain
+ *
+ */
 public class ModeleConnexion {
 	
-	
+	/**
+	 * Nom de l'utilisateur
+	 */
 	private String nomUtil;
+	/**
+	 * Mot De Passe de l'utilisateur
+	 */
 	private String motPasse;
+	/**
+	 * La connexion Bean
+	 */
 	private ConnexionBean connBean;
+	/**
+	 * Message d'erreur
+	 */
 	private String msgErreur;
 	
+	/**
+	 * Constructeur 
+	 * @param Nom de Utilisateur
+	 * @param Mot De Passe
+	 */
 	public ModeleConnexion(String nomUtilisateur,String mdp)
 	{
 		this.nomUtil = nomUtilisateur;
@@ -27,16 +47,29 @@ public class ModeleConnexion {
 		this.msgErreur = null;
 	}
 	
+	/**
+	 * Retourne la connextion bean
+	 * @return Connextion Bean
+	 */
 	public ConnexionBean getConnexionBean()
 	{
 		return this.connBean;
 	}
 	
+	/**
+	 * Retourne un message d'erreur
+	 * @return String
+	 */
 	public String getMsgErreur()
 	{
 		return this.msgErreur;
 	}
 	
+	/**
+	 * Methode pour se connecter
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
 	public void seConnecter() throws NamingException, SQLException
 	{
 		if(this.nomUtil != "" ||  this.motPasse != "")

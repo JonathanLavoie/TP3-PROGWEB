@@ -36,6 +36,9 @@ public class ModeleRechAmis {
 	 */
 	private String noUtil;
 	
+	/**
+	 * Constructeur qui inisalise la recherche d'ami
+	 */
 	public ModeleRechAmis() {
 		
 		this.lstAmis = null;
@@ -44,30 +47,60 @@ public class ModeleRechAmis {
 		this.villeOrigine = "";
 		this.sexe = "";
 	}
-
+	
+	/**
+	 * Retourne la liste des amis
+	 * @return ArrayList<Ami>
+	 */
 	public ArrayList<Ami> getLstAmis() {
 		return lstAmis;
 	}
 
+	/**
+	 * Set le Nom de l'ami
+	 * @param nomAmi
+	 */
 	public void setNomAmi(String nomAmi) {
 		this.nomAmi = nomAmi;
 	}
 
+	/**
+	 * Set le nom de la ville d'origine
+	 * @param villeOrigine
+	 */
 	public void setVilleOrigine(String villeOrigine) {
 		this.villeOrigine = villeOrigine;
 	}
 
+	/**
+	 * Set le nom de la ville actuelle
+	 * @param villeActuelle
+	 */
 	public void setVilleActuelle(String villeActuelle) {
 		this.villeActuelle = villeActuelle;
 	}
 
+	/**
+	 * Set le sexe
+	 * @param sexe
+	 */
 	public void setSexe(String sexe) {
 		this.sexe = sexe;
 	}
+	
+	/**
+	 * Set le numero de l'utilisateur
+	 * @param noUtil
+	 */
 	public void setnoUtil(String noUtil){
 		this.noUtil = noUtil;
 	}
 	
+	/**
+	 * Methode qui recherche des amis
+	 * @throws NamingException
+	 * @throws SQLException
+	 */
 	public void rechercheAmis() throws NamingException, SQLException {
 		
 		// Liste des condition
@@ -91,6 +124,8 @@ public class ModeleRechAmis {
 			lstParametres.add("%" + this.noUtil + "%");
 			lstParametres.add("%" + this.noUtil + "%");
 		}
+		// Si les champs de sont pas vide, on les ajoute dans la liste
+		// des conditions et la liste des parametres
 		if (this.nomAmi != "")
 		{
 			lstCondition.add(" MemNom LIKE ?");
